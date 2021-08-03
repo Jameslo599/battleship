@@ -2,7 +2,10 @@
 const Ship = (length) => {
   const healthBar = Array(length).fill("unhit");
   let sunk = false;
-  const hit = (location) => healthBar.splice(location, 1, "hit");
+  const hit = () => {
+    healthBar.shift();
+    return healthBar.push("hit");
+  };
   const isSunk = () => {
     if (healthBar.every((e) => e === "hit")) {
       sunk = true;
@@ -16,7 +19,7 @@ const Ship = (length) => {
 
 // Generates gameboards to place ships based on coordinates
 const Gameboard = () => {
-  const lifeBar = ["sunk", "sunk", "sunk", "sunk"];
+  const lifeBar = [];
   const grid = [[], [], [], [], [], [], [], [], [], []];
   for (let i = 1; i <= 100; i += 1) {
     if (i <= 10) {
@@ -74,38 +77,42 @@ const Gameboard = () => {
     return grid[coordinates.y][coordinates.x];
   };
 
-  const receiveAttack = (cell) => {
-    const coordinates = getXY(cell);
-    if (isObject(grid[coordinates.y][coordinates.x]) === true) {
-      grid[coordinates.y][coordinates.x].hit(0);
-      if (grid[coordinates.y][coordinates.x].isSunk() === true) {
+  const receiveAttack = (num1, num2) => {
+    if (isObject(grid[num1][num2]) === true) {
+      grid[num1][num2].hit();
+      if (grid[num1][num2].isSunk() === true) {
         lifeBar.push("sunk");
       }
       checkVictory();
-      return grid[coordinates.y][coordinates.x].isSunk();
+      return (grid[num1][num2] = "Hit");
     }
-    return "Miss";
+    return (grid[num1][num2] = "Miss");
   };
 
-  const mock = (length, cell) => {
-    const coordinates = getXY(cell);
-    const ship = Ship(length);
-    for (let i = 0; i < length; i += 1) {
-      grid[coordinates.y].splice(coordinates.x + i, 1, ship);
-    }
-    if (isObject(grid[coordinates.y][coordinates.x]) === true) {
-      grid[coordinates.y][coordinates.x].hit(0);
-      grid[coordinates.y][4].hit(1);
-      grid[coordinates.y][5].hit(2);
-      if (grid[coordinates.y][coordinates.x].isSunk() === true) {
-        lifeBar.push("sunk");
-      }
-      checkVictory();
-      return grid[coordinates.y][coordinates.x].healthBar;
-    }
-    return "Number";
-  };
-  return { grid, getXY, placeShip, receiveAttack, mock };
+  return { lifeBar, grid, getXY, placeShip, receiveAttack };
 };
 
-export { Ship, Gameboard };
+const Player = () => {
+  const user = Gameboard();
+  //The maximum is inclusive and the minimum is inclusive
+  const getRandomIntInclusive = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const range = getRandomIntInclusive(0, 9);
+  const computerAttack = () => {
+    //computer.placeShip(2, 1);
+    if (user.grid[range][range] === "Miss") {
+      return;
+    } else if (user.grid[range][range] === "Hit") {
+      return;
+    }
+    user.receiveAttack(range, range);
+    return user.grid;
+  };
+  return { computerAttack };
+};
+
+export { Ship, Gameboard, Player };

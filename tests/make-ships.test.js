@@ -1,7 +1,7 @@
-import { Ship, Gameboard } from "../src/make-ships";
+import { Ship, Gameboard, Player } from "../src/make-ships";
 
 test("validate Ship object", () => {
-  expect(Ship(4).hit(4)).toStrictEqual(expect.any(Array));
+  expect(Ship(4).hit()).toStrictEqual(expect.any(Number));
 });
 
 test("validate Ship object", () => {
@@ -10,11 +10,11 @@ test("validate Ship object", () => {
 
 test("validate Gameboard object", () => {
   expect(Gameboard()).toEqual({
+    lifeBar: expect.any(Array),
     grid: expect.any(Array),
     getXY: expect.any(Function),
     placeShip: expect.any(Function),
     receiveAttack: expect.any(Function),
-    mock: expect.any(Function),
   });
 });
 
@@ -30,6 +30,6 @@ test("places ship based on coordinates", () => {
   });
 });
 
-test("retrieves Gameboard coordinates", () => {
-  expect(Gameboard().mock(3, 4)).toEqual(["hit", "hit", "hit"]);
+test("computer selects cell", () => {
+  expect(Player().computerAttack()).toEqual("Hit");
 });
