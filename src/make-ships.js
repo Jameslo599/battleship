@@ -14,7 +14,7 @@ const Ship = (length) => {
     sunk = false;
     return sunk;
   };
-  return { healthBar, hit, isSunk };
+  return { hit, isSunk };
 };
 
 // Generates gameboards to place ships based on coordinates
@@ -89,11 +89,20 @@ const Gameboard = () => {
     return (grid[num1][num2] = "Miss");
   };
 
-  return { lifeBar, grid, getXY, placeShip, receiveAttack };
+  return {
+    lifeBar,
+    grid,
+    getXY,
+    placeShip,
+    receiveAttack,
+    isObject,
+    checkVictory,
+  };
 };
 
 const Player = () => {
   const user = Gameboard();
+
   //The maximum is inclusive and the minimum is inclusive
   const getRandomIntInclusive = (min, max) => {
     min = Math.ceil(min);
@@ -101,15 +110,26 @@ const Player = () => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  const range = getRandomIntInclusive(0, 9);
   const computerAttack = () => {
-    //computer.placeShip(2, 1);
-    if (user.grid[range][range] === "Miss") {
-      return;
-    } else if (user.grid[range][range] === "Hit") {
-      return;
+    for (let i = 0; i <= 0; i += 1) {
+      const compReceiveAttack = (num1, num2) => {
+        if (user.grid[num1][num2] === "Miss") {
+          i = i - 1;
+        } else if (user.grid[num1][num2] === "Hit") {
+          i = i - 1;
+        } else if (user.isObject(user.grid[num1][num2]) === true) {
+          user.grid[num1][num2].hit();
+          if (user.grid[num1][num2].isSunk() === true) {
+            user.lifeBar.push("sunk");
+          }
+          user.checkVictory();
+          return (user.grid[num1][num2] = "Hit");
+        }
+        return (user.grid[num1][num2] = "Miss");
+      };
+      const range = getRandomIntInclusive(0, 9);
+      compReceiveAttack(range, range);
     }
-    user.receiveAttack(range, range);
     return user.grid;
   };
   return { computerAttack };
