@@ -84,9 +84,11 @@ const Gameboard = () => {
         lifeBar.push("sunk");
       }
       checkVictory();
-      return (grid[num1][num2] = "Hit");
+      grid[num1][num2] = "Hit";
+      return grid[num1][num2];
     }
-    return (grid[num1][num2] = "Miss");
+    grid[num1][num2] = "Miss";
+    return grid[num1][num2];
   };
 
   return {
@@ -103,7 +105,7 @@ const Gameboard = () => {
 const Player = () => {
   const user = Gameboard();
 
-  //The maximum is inclusive and the minimum is inclusive
+  //	The maximum is inclusive and the minimum is inclusive
   const getRandomIntInclusive = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -114,18 +116,20 @@ const Player = () => {
     for (let i = 0; i <= 0; i += 1) {
       const compReceiveAttack = (num1, num2) => {
         if (user.grid[num1][num2] === "Miss") {
-          i = i - 1;
+          i -= 1;
         } else if (user.grid[num1][num2] === "Hit") {
-          i = i - 1;
+          i -= 1;
         } else if (user.isObject(user.grid[num1][num2]) === true) {
           user.grid[num1][num2].hit();
           if (user.grid[num1][num2].isSunk() === true) {
             user.lifeBar.push("sunk");
           }
           user.checkVictory();
-          return (user.grid[num1][num2] = "Hit");
+          user.grid[num1][num2] = "Hit";
+          return user.grid[num1][num2];
         }
-        return (user.grid[num1][num2] = "Miss");
+        user.grid[num1][num2] = "Miss";
+        return user.grid[num1][num2];
       };
       const range = getRandomIntInclusive(0, 9);
       compReceiveAttack(range, range);
