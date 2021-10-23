@@ -52,7 +52,7 @@ test("places ship on game grid", () => {
 });
 
 test("player selects cell", () => {
-  expect(Gameboard().receiveAttack(0, 2)).toEqual("Miss");
+  expect(Gameboard().receiveAttack(0, 0)).toEqual("Miss");
 });
 
 test("Player public interface", () => {

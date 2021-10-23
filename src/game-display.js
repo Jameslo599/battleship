@@ -1,4 +1,5 @@
 import { makeElement } from "./make-elements";
+import { Gameboard } from "./make-ships";
 
 const grid = document.getElementById("grid");
 
@@ -25,22 +26,48 @@ const makeDisplay = () => {
   document.getElementById("shipCount1").innerHTML = "Remaining Ships:5";
   document.getElementById("shipCount2").innerHTML = "Remaining Ships:5";
 
-  for (let i = 1; i <= 2; i += 1) {
-    const boardContainer = makeElement({
-      type: "div",
-      id: `boardContainer${i}`,
-      className: "boardContainer",
-    });
-    grid.appendChild(boardContainer);
+  const playerBoard = makeElement({
+    type: "div",
+    id: `playerBoard`,
+    className: "boardContainer",
+  });
+  grid.appendChild(playerBoard);
 
-    for (let num = 0; num <= 99; num += 1) {
-      const cell = makeElement({
-        type: "button",
-        id: `cell${num}`,
-        className: "cell",
-      });
-      boardContainer.appendChild(cell);
-    }
+  for (let num = 1; num <= 100; num += 1) {
+    const cell = makeElement({
+      type: "button",
+      id: `cell${num}`,
+      className: "cell",
+    });
+    playerBoard.appendChild(cell);
+	document.getElementById(`cell${num}`).addEventListener('click', () => {
+		const user = Gameboard();
+		const num1 = user.getXY(num).y
+		const num2 = user.getXY(num).x
+		user.placeShip(2, 1);
+		user.placeShip(2, 9);
+		if (user.isObject(user.grid[num1][num2]) === true) {
+			document.getElementById(`cell${num}`).style.backgroundColor = "black";
+		} else {
+			document.getElementById(`cell${num}`).style.backgroundColor = "blue";
+		};
+	});
+  };
+
+  const enemyBoard = makeElement({
+    type: "div",
+    id: `enemyBoard`,
+    className: "boardContainer",
+  });
+  grid.appendChild(enemyBoard);
+
+  for (let num = 1; num <= 100; num += 1) {
+    const cell = makeElement({
+      type: "button",
+      id: `enemyCell${num}`,
+      className: "cell",
+    });
+    enemyBoard.appendChild(cell);
   }
 };
 
