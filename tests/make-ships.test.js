@@ -57,10 +57,12 @@ test("player selects cell", () => {
 
 test("Player public interface", () => {
   expect(Player()).toEqual({
+    user: expect.any(Object),
+    getRandomIntInclusive: expect.any(Function),
     computerAttack: expect.any(Function),
   });
 });
 
 test("computer selects cell", () => {
-  expect(Player().computerAttack()).toEqual(expect.any(Array));
+  expect(Player().computerAttack(1, 2)).toEqual("Miss");
 });

@@ -112,31 +112,31 @@ const Player = () => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  const computerAttack = () => {
+  const computerAttack = (num1, num2) => {
     for (let i = 0; i <= 0; i += 1) {
-      const compReceiveAttack = (num1, num2) => {
-        if (user.grid[num1][num2] === "Miss") {
-          i -= 1;
-        } else if (user.grid[num1][num2] === "Hit") {
-          i -= 1;
-        } else if (user.isObject(user.grid[num1][num2]) === true) {
-          user.grid[num1][num2].hit();
-          if (user.grid[num1][num2].isSunk() === true) {
-            user.lifeBar.push("sunk");
-          }
-          user.checkVictory();
-          user.grid[num1][num2] = "Hit";
-          return user.grid[num1][num2];
+      if (user.grid[num1][num2] === "Miss") {
+        i -= 1;
+      } else if (user.grid[num1][num2] === "Hit") {
+        i -= 1;
+      } else if (user.isObject(user.grid[num1][num2]) === true) {
+        user.grid[num1][num2].hit();
+        if (user.grid[num1][num2].isSunk() === true) {
+          user.lifeBar.push("sunk");
         }
-        user.grid[num1][num2] = "Miss";
+        user.checkVictory();
+        user.grid[num1][num2] = "Hit";
         return user.grid[num1][num2];
-      };
-      const range = getRandomIntInclusive(0, 9);
-      compReceiveAttack(range, range);
+      }
+      user.grid[num1][num2] = "Miss";
+      return user.grid[num1][num2];
     }
-    return user.grid;
+    return null;
   };
-  return { computerAttack };
+  return {
+    user,
+    getRandomIntInclusive,
+    computerAttack,
+  };
 };
 
 export { Ship, Gameboard, Player };
