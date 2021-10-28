@@ -1,7 +1,10 @@
 import { makeElement } from "./make-elements";
-import { Gameboard, Player } from "./make-ships";
+import { Gameboard, Player, Ship } from "./make-ships";
 
 const grid = document.getElementById("grid");
+const user = Gameboard();
+user.placeShip(user.destroyer, 5, 1);
+user.placeShip(user.patrol, 2, 9);
 
 const makeDisplay = () => {
   for (let i = 1; i <= 2; i += 1) {
@@ -41,16 +44,21 @@ const makeDisplay = () => {
     });
     playerBoard.appendChild(cell);
     document.getElementById(`cell${num}`).addEventListener("click", () => {
-      const user = Gameboard();
-      const num1 = user.getXY(num).y;
-      const num2 = user.getXY(num).x;
-      user.placeShip(2, 1);
-      user.placeShip(2, 9);
+      const player = Gameboard();
+      const num1 = player.getXY(num).y;
+      const num2 = player.getXY(num).x;
+
+      console.log(user.grid);
       if (user.isObject(user.grid[num1][num2]) === true) {
         document.getElementById(`cell${num}`).style.backgroundColor = "black";
+        user.receiveAttack(num1, num2);
+        console.log(user.destroyer.healthBar);
+        console.log(user.patrol.healthBar);
+		console.log(user.lifeBar);
       } else {
         document.getElementById(`cell${num}`).style.backgroundColor = "blue";
       }
+      document.getElementById(`cell${num}`).disabled = true;
     });
   }
 
@@ -67,6 +75,7 @@ const makeDisplay = () => {
       id: `enemyCell${num}`,
       className: "cell",
     });
+    cell.disabled = true;
     enemyBoard.appendChild(cell);
     document.getElementById(`cell${num}`).addEventListener("click", () => {
       const computer = Player();

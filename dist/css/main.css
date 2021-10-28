@@ -45,6 +45,12 @@ body {
   height: 50px;
 }
 
+.cell:disabled {
+  background: #efefef;
+  border-color: rgb(118, 118, 118);
+  border-width: 1px;
+}
+
 #copyrightHolder {
   display: block;
   width: 100%;

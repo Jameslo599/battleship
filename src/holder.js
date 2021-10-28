@@ -1,6 +1,6 @@
 //	Generates battleships depending on length
 const Ship = (length) => {
-  const healthBar = Array.from({ length: `${length}` });
+  const healthBar = Array(length).fill("unhit");
   let sunk = false;
   const hit = () => {
     healthBar.shift();
@@ -14,13 +14,11 @@ const Ship = (length) => {
     sunk = false;
     return sunk;
   };
-  return { hit, isSunk, healthBar };
+  return { hit, isSunk };
 };
 
 // Generates gameboards to place ships based on coordinates
 const Gameboard = () => {
-  const destroyer = Ship(5);
-  const patrol = Ship(2);
   const lifeBar = [];
   const grid = [[], [], [], [], [], [], [], [], [], []];
   for (let i = 1; i <= 100; i += 1) {
@@ -70,8 +68,9 @@ const Gameboard = () => {
     return message;
   };
 
-  const placeShip = (ship, length, cell) => {
+  const placeShip = (length, cell) => {
     const coordinates = getXY(cell);
+    const ship = Ship(length);
     for (let i = 0; i < length; i += 1) {
       grid[coordinates.y].splice(coordinates.x + i, 1, ship);
     }
@@ -96,8 +95,6 @@ const Gameboard = () => {
     lifeBar,
     grid,
     getXY,
-    destroyer,
-    patrol,
     placeShip,
     receiveAttack,
     isObject,
