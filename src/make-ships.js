@@ -19,8 +19,12 @@ const Ship = (length) => {
 
 // Generates gameboards to place ships based on coordinates
 const Gameboard = () => {
-  const destroyer = Ship(5);
-  const patrol = Ship(2);
+  const carrier = Ship(5);
+  const battleship = Ship(4);
+  const cruiser = Ship(3);
+  const submarine = Ship(3);
+  const destroyer = Ship(2);
+
   const lifeBar = [];
   const grid = [[], [], [], [], [], [], [], [], [], []];
   for (let i = 1; i <= 100; i += 1) {
@@ -84,7 +88,6 @@ const Gameboard = () => {
       if (grid[num1][num2].isSunk() === true) {
         lifeBar.push("sunk");
       }
-      checkVictory();
       grid[num1][num2] = "Hit";
       return grid[num1][num2];
     }
@@ -96,8 +99,11 @@ const Gameboard = () => {
     lifeBar,
     grid,
     getXY,
+    carrier,
+    battleship,
+    cruiser,
+    submarine,
     destroyer,
-    patrol,
     placeShip,
     receiveAttack,
     isObject,
