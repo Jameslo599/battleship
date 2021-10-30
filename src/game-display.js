@@ -39,34 +39,6 @@ const makeDisplay = () => {
   });
   grid.appendChild(playerBoard);
 
-  for (let num = 1; num <= 100; num += 1) {
-    const cell = makeElement({
-      type: "button",
-      id: `cell${num}`,
-      className: "cell",
-    });
-    playerBoard.appendChild(cell);
-    document.getElementById(`cell${num}`).addEventListener("click", () => {
-      const player = Gameboard();
-      const num1 = player.getXY(num).y;
-      const num2 = player.getXY(num).x;
-
-      if (user.isObject(user.grid[num1][num2]) === true) {
-        document.getElementById(`cell${num}`).style.backgroundColor = "black";
-        user.receiveAttack(num1, num2);
-      } else {
-        document.getElementById(`cell${num}`).style.backgroundColor = "blue";
-      }
-      document.getElementById(`cell${num}`).disabled = true;
-      if (user.checkVictory() === "You Win!") {
-        const cells = document.getElementsByClassName("cell");
-        for (let i = 0; i < cells.length; i += 1) {
-          cells[i].disabled = true;
-        }
-      }
-    });
-  }
-
   const enemy = Player();
   enemy.user.placeShip(enemy.user.carrier, 5, 1);
   enemy.user.placeShip(enemy.user.battleship, 4, 11);
@@ -87,22 +59,23 @@ const makeDisplay = () => {
       id: `enemyCell${num}`,
       className: "cell",
     });
-    cell.disabled = true;
+
     enemyBoard.appendChild(cell);
-    document.getElementById(`cell${num}`).addEventListener("click", () => {
+    document.getElementById(`enemyCell${num}`).addEventListener("click", () => {
       const computer = Player();
+	  const player = Gameboard();
       for (let i = 0; i <= 0; i += 1) {
         const range1 = computer.getRandomIntInclusive(0, 9);
         const range2 = computer.getRandomIntInclusive(0, 9);
-        const cellNumber = computer.user.grid[range1][range2];
-
+        const cellNumber = player.grid[range1][range2];
+		console.log(enemy.user.grid);
         if (
-          document.getElementById(`enemyCell${cellNumber}`).style
+          document.getElementById(`cell${cellNumber}`).style
             .backgroundColor === "blue"
         ) {
           i -= 1;
         } else if (
-          document.getElementById(`enemyCell${cellNumber}`).style
+          document.getElementById(`cell${cellNumber}`).style
             .backgroundColor === "black"
         ) {
           i -= 1;
@@ -110,19 +83,50 @@ const makeDisplay = () => {
           enemy.computerAttack(range1, range2);
           if (enemy.user.grid[range1][range2] === "Hit") {
             document.getElementById(
-              `enemyCell${cellNumber}`
+              `cell${cellNumber}`
             ).style.backgroundColor = "black";
           } else {
             document.getElementById(
-              `enemyCell${cellNumber}`
+              `cell${cellNumber}`
             ).style.backgroundColor = "blue";
           }
         }
+		document.getElementById(`enemyCell${num}`).disabled = true;
       }
       if (enemy.user.checkVictory() === "You Win!") {
+		  alert('enemy')
         const cells = document.getElementsByClassName("cell");
         for (let cellNum = 0; cellNum < cells.length; cellNum += 1) {
           cells[cellNum].disabled = true;
+        }
+      }
+    });
+  }
+
+  for (let num = 1; num <= 100; num += 1) {
+    const cell = makeElement({
+      type: "button",
+      id: `cell${num}`,
+      className: "cell",
+    });
+    playerBoard.appendChild(cell);
+	cell.disabled = true;
+    document.getElementById(`enemyCell${num}`).addEventListener("click", () => {
+      const player = Gameboard();
+      const num1 = player.getXY(num).y;
+      const num2 = player.getXY(num).x;
+
+      if (enemy.user.isObject(user.grid[num1][num2]) === true) {
+        document.getElementById(`enemyCell${num}`).style.backgroundColor = "black";
+        user.receiveAttack(num1, num2);
+      } else {
+        document.getElementById(`enemyCell${num}`).style.backgroundColor = "blue";
+      }
+      document.getElementById(`enemyCell${num}`).disabled = true;
+      if (user.checkVictory() === "You Win!") {
+        const cells = document.getElementsByClassName("cell");
+        for (let i = 0; i < cells.length; i += 1) {
+          cells[i].disabled = true;
         }
       }
     });
